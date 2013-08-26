@@ -11,7 +11,13 @@
       <button id="btnCreate">Create</button>
       <br>
       <pre><code class="java" id="export"></code></pre>
-      <button id="btnDl">下载</button>
+      
+      <div>
+        <button id="btnSaveAs">选择输出目录...</button>
+        <input type="file" nwdirectory id="targetDir" style="display:none;"/><!--隐藏-->
+        <span id="target"></span>
+        <button id="btnDl" disabled style="float:right;">下载</button>
+      </div>
   </body>
   
   <script src="lib/underscore-min.js"></script>
