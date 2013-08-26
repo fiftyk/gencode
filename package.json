@@ -1,0 +1,8 @@
+{
+  "name": "Gen",
+  "main": "index.html",
+  "window": {
+    "title" : "代码生成工具",
+    "toolbar": true
+  }
+}
