@@ -4,7 +4,7 @@ var fs = require('fs');
 $(function(){
 
     //使用同步的方式直接从文件读取模板
-    var tpl = fs.readFileSync('tpls/mapper.tpl','utf8'),//读取模板
+    var tpl = fs.readFileSync('tpls/IEntityMapper.java.tpl','utf8'),//读取模板
         compiler = Handlebars.compile(tpl),//编译模板
         source = null,//保存生成代码
         target_dir = null,//保存代码路径
