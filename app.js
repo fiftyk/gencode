@@ -7,21 +7,24 @@ Handlebars.registerHelper('lowerCase', function(str) {
 });
 
 Handlebars.registerHelper('join', function(context, options) {
-
-  var result = [];
-  for(var i=0, j=context.length; i<j; i++) {
+  var result = [], sep = options.hash['sep']||',', s = options.hash['start']^0;
+  for(var i=s, j=context.length; i<j; i++) {
     result.push(options.fn(context[i]));
   }
-
-  return result.join(',');
+  return result.join(sep);
 });
 
 $(function(){
+    var dir = localStorage.path;
+    if(dir){
+        $('#target').html(dir);
+    }
+
     var tpls = [
-        // ['EntityController.java', '{{package}}.controller.{{class}}Controller.java'],
-        // ['IEntityService.java', '{{package}}.service.I{{class}}Service.java'],
-        // ['EntityService.java', '{{package}}.service.impl.{{class}}ServiceImpl.java'],
-        // ['IEntityMapper.java', '{{package}}.persistence.I{{class}}Mapper.java'],
+        ['EntityController.java', '{{package}}.controller.{{class}}Controller.java'],
+        ['IEntityService.java', '{{package}}.service.I{{class}}Service.java'],
+        ['EntityService.java', '{{package}}.service.impl.{{class}}ServiceImpl.java'],
+        ['IEntityMapper.java', '{{package}}.persistence.I{{class}}Mapper.java'],
         ['EntityMapper.xml', '{{package}}.persistence.mapper.{{class}}Mapper.xml']
         ],
         compilers = [],
@@ -36,23 +39,26 @@ $(function(){
 
         sources = null;
 
-    for(var i = 0, len = tpls.length; i < len; i++){
+    var cp = function(tpl){
         //读取本地模板文件
-        var source_tpl = fs.readFileSync('tpls/' + tpls[i][0] + '.tpl','utf8'),
+        var source_tpl = fs.readFileSync('tpls/' + tpl[0] + '.tpl','utf8'),
             source_compiler = Handlebars.compile(source_tpl),
-            name_compiler = Handlebars.compile(tpls[i][1]);
+            name_compiler = Handlebars.compile(tpl[1]);
 
         compilers.push({
             source: source_compiler,
             name: name_compiler
         });
-    }
+    };
+
+    //加载并编译模板
+    _.each(tpls, cp);
 
     var onBtnCreateHandler = function(){
         sources = [];
-        for(var i = 0, len = compilers.length; i < len; i++){
-            var source_compiler = compilers[i].source,
-                name_compiler = compilers[i].name,
+        _.each(compilers,function(compiler){
+            var source_compiler = compiler.source,
+                name_compiler = compiler.name,
                 pkg = $txtPkg.val(),
                 klass = $txtClass.val(),
                 fields = $txtFields.val().split(','),
@@ -72,7 +78,7 @@ $(function(){
                 title: name,
                 content: source
             });
-        };
+        });
         
         var html = tplsCompiler({
             sources: sources
@@ -85,31 +91,30 @@ $(function(){
         });
     };
 
-    $('#btnCreate').click(onBtnCreateHandler);
+    var onTargetChange = function() {
+        localStorage.path = this.value;
+        $('#target').html(this.value);
+    };
 
-    $('#targetDir').bind("change", function() {
-      process.chdir(this.value);
-      $('#target').html(this.value);
-    });
-
-    $('#btnTarget').click(function(){
+    var onBtnTargetClick = function(){
         $('#targetDir').click();
-    });
+    };
 
-    $('#btnDl').click(function(){
-        var file = $('#txtPkg').val() + '.persistence.I' + $('#txtClass').val() + 'Mapper';
+    var onBtnDlClick = function(){
+        _.each(sources, function(source){
+            var file = source.title, content = source.content;
+            tbl.save(
+                localStorage.path.split('/').join('.') + '/' + file,
+                _.unescape(content)
+            ); 
+        });
 
-        for(var i = 0, size = sources.length; i < size; i++){
-            var source = sources[i],
-                file = source.title,
-                content = source.content;
-            tbl.save(file, _.unescape(content), function(){
-                
-            });  
-        }
-        
         alert('创建完成!');
-                
-    });
+    };
+
+    $('#btnCreate').click(onBtnCreateHandler);
+    $('#targetDir').change(onTargetChange);
+    $('#btnTarget').click(onBtnTargetClick);
+    $('#btnDl').click(onBtnDlClick);
 
 });
