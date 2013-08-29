@@ -17,7 +17,7 @@ import {{ package }}.domain.{{ class }}Query;
 import {{ package }}.service.I{{ class }}Service;
 
 @Controller
-@RequestMapping("/{{ class }}s")
+@RequestMapping("/{{lowerCase class }}s")
 public class {{ class }}Controller {
     
     @Autowired
@@ -37,8 +37,8 @@ public class {{ class }}Controller {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    public JSONRenderer append(@RequestBody {{ class }} {{ class }}){
-        return service.append({{ class }});
+    public JSONRenderer append(@RequestBody {{ class }} entity){
+        return service.append(entity);
     }
     
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
@@ -55,8 +55,8 @@ public class {{ class }}Controller {
 
     @RequestMapping(value="/{id}", method = RequestMethod.PUT)
     @ResponseBody
-    public JSONRenderer update(@RequestBody {{ class }} {{ class }}){
-        return service.update({{ class }});
+    public JSONRenderer update(@RequestBody {{ class }} entity){
+        return service.update(entity);
     }
     
 }
