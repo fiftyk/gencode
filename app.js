@@ -1,71 +1,68 @@
 //加载nodejs fs module
 var fs = require('fs');
 
-$(function(){
+Handlebars.registerHelper('toLowerCase', function(str) {
+    console.log(str);
+  return str.toLowerCase() + 's';
+});
 
-    //使用同步的方式直接从文件读取模板
-    var tpl = fs.readFileSync('tpls/IEntityMapper.java.tpl','utf8'),//读取模板
-        compiler = Handlebars.compile(tpl),//编译模板
-        source = null,//保存生成代码
-        target_dir = null,//保存代码路径
-        klass = null,//保存填写的类名
-        pkg = null,//保存填写的包名
+$(function(){
+    var tpls = [
+        ['EntityController.java', '{{package}}.controller.{{class}}Controller.java'],
+        ['IEntityService.java', '{{package}}.service.I{{class}}Service.java'],
+        ['EntityService.java', '{{package}}.service.impl.{{class}}Service.java'],
+        ['IEntityMapper.java', '{{package}}.persistence.I{{class}}Mapper.java'],
+        ['EntityMapper.xml', '{{package}}.persistence.mapper.{{class}}Mapper.xml']
+        ],
+        compilers = [],
         $txtClass = $('#txtClass'),
         $txtPkg = $('#txtPkg'),
-        $btnDl = $('#btnDl'),
-        $targetDir = $('#targetDir');
+        $tpls = $('#entry-template'),
+        tplsCompiler = Handlebars.compile($tpls.html());
 
-    //创建按钮单击事件处理函数
-    var onBtnCreateClick = function(){
-        klass = $txtClass.val();
-        pkg = $txtPkg.val();
+    for(var i = 0, len = tpls.length; i < len; i++){
+        //读取本地模板文件
+        var source_tpl = fs.readFileSync('tpls/' + tpls[i][0] + '.tpl','utf8'),
+            source_compiler = Handlebars.compile(source_tpl),
+            name_compiler = Handlebars.compile(tpls[i][1]);
 
-        source = compiler({
-            'class': klass,
-            'package': pkg
+        compilers.push({
+            source: source_compiler,
+            name: name_compiler
         });
+    }
 
-        //_.escape 是 underscore.js 的方法
-        $('#export')
-            .html(_.escape(source))
-            .each(function(i, e) {hljs.highlightBlock(e)});
-    };
+    var onBtnCreateHandler = function(){
+        var sources = [];
+        for(var i = 0, len = compilers.length; i < len; i++){
+            var source_compiler = compilers[i].source,
+                name_compiler = compilers[i].name,
+                pkg = $txtPkg.val(),
+                klass = $txtClass.val(),
+                context = {
+                    'package': pkg,
+                    'class': klass
+                },
+                name = name_compiler(context),
+                source = source_compiler(context);
 
-    //下载按钮单击事件处理函数
-    var onBtnDlClick = function(){
-        if(!source){
-          alert('请先生成代码!');
-          return;  
-        } 
-        
-        //异步方式创建打开文件，并写入数据
-        fs.open(target_dir + '/' + klass + '.java', 'w', 0777, function(e, fd){
-
-            //_.unescape 是 underscore.js 的方法
-            fs.write(fd, _.unescape(source), 0, 'utf8',function(){
-                fs.closeSync(fd);
-                alert('代码生成!');
+            sources.push({
+                title: name,
+                content: source
             });
+        };
+        
+        var html = tplsCompiler({
+            sources: sources
+        });
 
+        $('#content').empty().html(html);
+
+        $('.java').each(function(i, e) {
+            hljs.highlightBlock(e)
         });
     };
 
-    var onTargetDirChange = function(){
-        target_dir = this.value;
-        $('#target').html(target_dir);
-        $btnDl.removeAttr('disabled');
-    };
-
-    var onBtnSaveAsClick = function(){
-        $targetDir.click();
-    };
-
-    $('#btnCreate').click(onBtnCreateClick);
-
-    $btnDl.bind('click', onBtnDlClick);
-
-    $targetDir.bind('change', onTargetDirChange);
-
-    $('#btnSaveAs').bind('click', onBtnSaveAsClick);
+    $('#btnCreate').click(onBtnCreateHandler);
 
 });
