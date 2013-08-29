@@ -7,9 +7,20 @@ Handlebars.registerHelper('lowerCase', function(str) {
 });
 
 Handlebars.registerHelper('join', function(context, options) {
-  var result = [], sep = options.hash['sep']||',', s = options.hash['start']^0;
+  var result = [], sep = options.hash['sep']||',',
+    s = options.hash['start']^0, data;
   for(var i=s, j=context.length; i<j; i++) {
-    result.push(options.fn(context[i]));
+    if (options.data) {
+      data = Handlebars.createFrame(options.data || {});
+      data.index = i;
+      if(i == (j - 1)){
+        data.last = true;
+      }else{
+        data.last = false;
+      }
+    }
+
+    result.push(options.fn(context[i], { data: data }));
   }
   return result.join(sep);
 });

@@ -86,13 +86,13 @@
     where id = #{value}
   </delete>
   
-  <!--更新-->
+  <!--更新ss-->
   <update id="update" parameterType="{{ class }}">
     update
       t_{{ lowerCase class }}
     set{{#join fields start="1"}}
       <if test="{{this}} != null and {{this}} != ''">
-      {{this}} = #{ {{this}} }
+      {{this}} = #{ {{this}} },
       </if>{{/join}}
     where
       id = #{id}
