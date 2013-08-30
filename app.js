@@ -64,6 +64,13 @@ $(function(){
     //加载并编译模板
     _.each(tpls, cp);
 
+    //从输入框获取list
+    var get_list = function($, sep){
+        var val = $.val().trim();
+        if(val === '') return false;
+        return val.split(sep||',');
+    };
+
     var onBtnCreateHandler = function(){
         sources = [];
         _.each(compilers,function(compiler){
@@ -71,9 +78,9 @@ $(function(){
                 name_compiler = compiler.name,
                 pkg = $txtPkg.val(),
                 klass = $txtClass.val(),
-                fields = $txtFields.val().split(','),
-                fFields = $txtFFields.val().split(','),
-                qFields = $txtQFields.val().split(','),
+                fields = get_list($txtFields),
+                fFields = get_list($txtFFields),
+                qFields = get_list($txtQFields),
                 context = {
                     'package': pkg,
                     'class': klass,
@@ -99,6 +106,8 @@ $(function(){
         $('.java').each(function(i, e) {
             hljs.highlightBlock(e)
         });
+
+        $('#btnDl').removeAttr('disabled').html('生成代码').css('color','black');
     };
 
     var onTargetChange = function() {
@@ -119,7 +128,7 @@ $(function(){
             ); 
         });
 
-        alert('创建完成!');
+        $('#btnDl').html('代码已生成！').attr('disabled',true).css('color','red');
     };
 
     $('#btnCreate').click(onBtnCreateHandler);

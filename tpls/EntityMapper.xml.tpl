@@ -9,19 +9,20 @@
     where 1=1
   
     <!--查询字段-->
+    {{#if qFields }}
     <if test="text != null and text != ''">
     and (
       {{#join qFields sep="or"}} 
       {{this}} like '%${text}%' {{/join}}
     )
     </if>
-    
+    {{/if}}
     <!--过滤字段-->
-    {{#each fFields}}
+    {{#if fFields }}{{#each fFields}}
     <if test="{{this}} != null and {{this}} != ''">
     and {{this}} like '%${ {{this}} }'
     </if>
-    {{/each}}
+    {{/each}}{{/if}}
     order by #{o}
     <if test="ot == 'DESC'">
     desc
