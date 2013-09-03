@@ -3,7 +3,7 @@
 <mapper namespace="{{ package }}.persistence.I{{ class }}Mapper">
   
   <!--分页查询-->
-  <select id="query" parameterType="{{ class }}Query" resultType="{{ class }}">
+  <select id="query" parameterType="{{ class }}" resultType="{{ class }}">
     select *
       from t_{{ lowerCase class }}
     where 1=1
@@ -35,7 +35,7 @@
   </select>
   
   <!--计数-->
-  <select id="count" parameterType="{{ class }}Query" resultType="int">
+  <select id="count" parameterType="{{ class }}" resultType="int">
     select count(1)
       from t_{{ lowerCase class }}
     where 1=1

@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import net.yhte.common.result.JSONRenderer;
 import {{ package }}.domain.{{ class }};
-import {{ package }}.domain.{{ class }}Query;
 import {{ package }}.service.I{{ class }}Service;
 
 @Controller
@@ -25,13 +24,13 @@ public class {{ class }}Controller {
     
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public JSONRenderer query({{ class }}Query query){
+    public JSONRenderer query({{ class }} query){
         return service.query(query);
     }
     
     @RequestMapping(value="/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public JSONRenderer get(@PathVariable String id){
+    public JSONRenderer get(@PathVariable int id){
         return service.get(id);
     }
 
@@ -43,7 +42,7 @@ public class {{ class }}Controller {
     
     @RequestMapping(value="/{id}", method = RequestMethod.DELETE)
     @ResponseBody
-    public JSONRenderer delete(@PathVariable String id){
+    public JSONRenderer delete(@PathVariable int id){
         return service.delete(id);
     }
     

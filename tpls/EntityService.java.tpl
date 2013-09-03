@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.yhte.common.result.JSONRenderer;
 import {{ package }}.domain.{{ class }};
-import {{ package }}.domain.{{ class }}Query;
 import {{ package }}.persistence.I{{ class }}Mapper;
 import {{ package }}.service.I{{ class }}Service;
 
@@ -20,7 +19,7 @@ public class {{ class }}ServiceImpl implements I{{ class }}Service {
     private I{{ class }}Mapper mapper;
     
     @Override
-    public JSONRenderer query({{ class }}Query query) {
+    public JSONRenderer query({{ class }} query) {
         try {
             List<{{ class }}> enties = mapper.query(query);
             int count = mapper.count(query);
@@ -32,7 +31,7 @@ public class {{ class }}ServiceImpl implements I{{ class }}Service {
     }
 
     @Override
-    public JSONRenderer get(String id) {
+    public JSONRenderer get(int id) {
         try {
             {{ class }} entity = mapper.get(id);
             return JSONRenderer.OK(entity);
@@ -54,7 +53,7 @@ public class {{ class }}ServiceImpl implements I{{ class }}Service {
     }
 
     @Override
-    public JSONRenderer delete(String id) {
+    public JSONRenderer delete(int id) {
         try {
             Boolean bool = mapper.delete(id);
             return JSONRenderer.OK(bool);
