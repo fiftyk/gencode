@@ -2,14 +2,15 @@ package {{ package }}.service.impl;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import net.yhte.common.query.XQuery;
 import net.yhte.common.result.JSONRenderer;
 import {{ package }}.domain.{{ class }};
 import {{ package }}.persistence.I{{ class }}Mapper;
 import {{ package }}.service.I{{ class }}Service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
@@ -19,7 +20,7 @@ public class {{ class }}ServiceImpl implements I{{ class }}Service {
     private I{{ class }}Mapper mapper;
     
     @Override
-    public JSONRenderer query({{ class }} query) {
+    public JSONRenderer query(XQuery query) {
         try {
             List<{{ class }}> enties = mapper.query(query);
             int count = mapper.count(query);

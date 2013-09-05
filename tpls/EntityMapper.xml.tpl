@@ -3,7 +3,7 @@
 <mapper namespace="{{ package }}.persistence.I{{ class }}Mapper">
   
   <!--分页查询-->
-  <select id="query" parameterType="{{ class }}" resultType="{{ class }}">
+  <select id="query" parameterType="XQuery" resultType="{{ class }}">
     select *
       from t_{{ lowerCase class }}
     where 1=1
@@ -19,8 +19,8 @@
     {{/if}}
     <!--过滤字段-->
     {{#if fFields }}{{#each fFields}}
-    <if test="{{this}} != null and {{this}} != ''">
-    and {{this}} like '%${ {{this}} }'
+    <if test="X.{{this}} != null and X.{{this}} != ''">
+    and {{this}} like '%${ X.{{this}} }'
     </if>
     {{/each}}{{/if}}
     order by #{o}
@@ -35,7 +35,7 @@
   </select>
   
   <!--计数-->
-  <select id="count" parameterType="{{ class }}" resultType="int">
+  <select id="count" parameterType="XQuery" resultType="int">
     select count(1)
       from t_{{ lowerCase class }}
     where 1=1
@@ -50,8 +50,8 @@
 
     <!--过滤字段-->
     {{#each fFields}}
-    <if test="{{this}} != null and {{this}} != ''">
-    and {{this}} like '%${ {{this}} }'
+    <if test="X.{{this}} != null and X.{{this}} != ''">
+    and {{this}} like '%${ X.{{this}} }'
     </if>
     {{/each}}
   </select>
