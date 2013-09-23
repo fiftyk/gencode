@@ -7,11 +7,11 @@
   </head>
   <body>
       包名：<input id="txtPkg" type="text" value="net.yhte.gis.vqd">
-      名称：<input id="txtClass" type="text" value="Group">
+      名称：<input id="txtClass" type="text" value="LastResult">
       <br>
-      字段：<input id="txtFields" type="text" value="id,name">
-      搜索字段：<input id="txtQFields" type="text" value="name">
-      过滤字段：<input id="txtFFields" type="text" value="">
+      字段：<input id="txtFields" type="text" value="id,plan_id,device_id,date,singnal,contrast,brightness,waveNoise,colorBiased,noise,flowerScreen,vague,ptz,url,result">
+      搜索字段：<input id="txtQFields" type="text" value="plan_id,device_id,date,singnal,contrast,brightness,waveNoise,colorBiased,noise,flowerScreen,vague,ptz,url,result">
+      过滤字段：<input id="txtFFields" type="text" value="plan_id,device_id,date,singnal,contrast,brightness,waveNoise,colorBiased,noise,flowerScreen,vague,ptz,url,result">
       <br>
       <button id="btnCreate">Create</button>
       <button id="btnTarget">选择输出目录...</button>
@@ -28,7 +28,7 @@
   <script src="lib/handlebars.js"></script>
   <!-- 语法高亮 -->
   <script src="lib/highlight.pack.js"></script>
-  <script src="app.js"></script>
+  <script src="init.js"></script>
   
   <script id="entry-template" type="text/x-handlebars-template">
     {{#each sources}}

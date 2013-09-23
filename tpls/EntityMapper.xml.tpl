@@ -20,7 +20,7 @@
     <!--过滤字段-->
     {{#if fFields }}{{#each fFields}}
     <if test="X.{{this}} != null and X.{{this}} != ''">
-    and {{this}} like '%${ X.{{this}} }'
+    and {{this}} = '${ X.{{this}} }'
     </if>
     {{/each}}{{/if}}
     order by #{o}
@@ -51,7 +51,7 @@
     <!--过滤字段-->
     {{#each fFields}}
     <if test="X.{{this}} != null and X.{{this}} != ''">
-    and {{this}} like '%${ X.{{this}} }'
+    and {{this}} = '{ X.{{this}} }'
     </if>
     {{/each}}
   </select>
